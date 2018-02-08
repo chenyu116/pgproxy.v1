@@ -234,7 +234,11 @@ func NewProxy() *Proxy {
 		cleanLock:      make(map[string]*sync.Mutex),
 	}
 
-	p.init()
+	err := p.init()
+	if err != nil {
+		log.Errorf("init err:%v", err)
+		return nil
+	}
 
 	go p.delayQueryOpt()
 
@@ -359,23 +363,24 @@ func (p *Proxy) makeConnection(node common.Node) (writePoolsLen, readPoolsLen in
 	return
 }
 
-func (p *Proxy) init() {
+func (p *Proxy) init() error {
 	redisConfig := config.GetRedisConfig()
 	redisPool, err := radix.NewPool("tcp", redisConfig.HostPort, 10, nil)
 	if err != nil {
 		log.Errorf("pool err:%v", err)
 		return
 	}
-	nodes := config.GetNodes()
-	p.redisDB = redisPool
-	p.redisDB.Do(radix.Cmd(nil, "FLUSHALL"))
-	p.redisDB.Do(radix.Cmd(nil, "SELECT", redisConfig.Database))
-	log.Infof("Redis Server Connected %s", redisConfig.HostPort)
 
+	nodes := config.GetNodes()
 	p.nodesOffline = newOfflineNodeMap(len(nodes))
 
 	p.stats = newNodeStatsMap()
 	p.nodeReady = newNodeReadyMap()
+
+	p.redisDB = redisPool
+	p.redisDB.Do(radix.Cmd(nil, "FLUSHALL"))
+	p.redisDB.Do(radix.Cmd(nil, "SELECT", redisConfig.Database))
+	log.Infof("Redis Server Connected %s", redisConfig.HostPort)
 
 	/* Initialize pool structures */
 	p.writeNodes = newWriteNodeMap()
