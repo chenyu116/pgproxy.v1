@@ -12,7 +12,6 @@ credentials:
 healthcheck: 
   connecttimeout: 500
   delay: 5
-  query: "select now()"
   querylogexpired: 10
 redis: 
   database: 0
