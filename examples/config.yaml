@@ -1,0 +1,32 @@
+credentials: 
+  username: postgres
+  password: ""
+  database: postgres
+  options: ~
+  ssl: 
+    enable: false
+healthcheck: 
+  connecttimeout: 500
+  delay: 5
+  querylogexpired: 10
+redis: 
+  database: 0
+  hostport: "127.0.0.1:6379"
+  password: ""
+server: 
+  api: 
+    hostport: "127.0.0.1:8000"
+  proxy: 
+    hostport: "127.0.0.1:5000"
+writenode: 
+  writepools: 10
+  writepoolsdelaytime: 1
+nodes: 
+  1: 
+    hostport: "127.0.0.1:5432"
+    readpools: 10
+    role: writer
+  2: 
+    hostport: "127.0.0.1:5433"
+    readpools: 10
+    role: writer

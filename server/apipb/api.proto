@@ -1,0 +1,15 @@
+syntax="proto3";
+
+package pgproxy.server.apipb;
+option go_package = "apipb";
+
+
+message ShutdownRequest {
+}
+
+message ShutdownResponse {
+}
+
+service Api {
+    rpc Shutdown(ShutdownRequest) returns (ShutdownResponse) {}
+}
