@@ -368,7 +368,7 @@ func (p *Proxy) init() error {
 	redisPool, err := radix.NewPool("tcp", redisConfig.HostPort, 10, nil)
 	if err != nil {
 		log.Errorf("pool err:%v", err)
-		return
+		return err
 	}
 
 	nodes := config.GetNodes()
@@ -409,6 +409,7 @@ func (p *Proxy) init() error {
 		}()
 	}
 	wg.Wait()
+	return nil
 }
 
 // Get the read node

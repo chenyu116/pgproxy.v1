@@ -50,7 +50,7 @@ func (s *ProxyServer) Serve(l net.Listener) error {
 
 	if s.proxy == nil {
 		s.listener.Close()
-		return
+		return nil
 	}
 
 	log.Infof("Proxy Server listening on: %s", l.Addr())
