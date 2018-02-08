@@ -46,12 +46,12 @@ func (s *ProxyServer) Serve(l net.Listener) error {
 	s.listener = l
 
 	s.proxy = proxy.NewProxy()
-	defer s.proxy.Close()
 
 	if s.proxy == nil {
 		s.listener.Close()
 		return nil
 	}
+	defer s.proxy.Close()
 
 	log.Infof("Proxy Server listening on: %s", l.Addr())
 
